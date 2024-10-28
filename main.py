@@ -2,6 +2,8 @@ import speech_recognition as sr
 import tkinter as tk
 from tkinter import messagebox
 
+
+
 # Function to capture voice input and convert it to text
 def voice_to_text():
     recognizer = sr.Recognizer()
@@ -30,6 +32,8 @@ class BankingFormApp:
         self.create_field("Account Number", 1)
         self.create_field("Phone Number", 2)
         self.create_field("Address", 3)
+        self.create_field("Adhaar Card", 4)
+        self.create_field("Withdraw Amount", 5)
         
         # Submit button
         submit_button = tk.Button(root, text="Submit", command=self.submit_form)
@@ -55,6 +59,9 @@ class BankingFormApp:
         # Get all entries and show as a message box (can replace with form submission functionality)
         info = "\n".join(f"{self.root.grid_slaves(row=i, column=0)[0]['text']}: {self.root.grid_slaves(row=i, column=1)[0].get()}" for i in range(4))
         messagebox.showinfo("Form Submitted", f"Details:\n{info}")
+        
+
+        
 
 # Run the application
 if __name__ == "__main__":
@@ -93,10 +100,13 @@ class BankingFormApp:
         self.create_field("Account Number", 1)
         self.create_field("Phone Number", 2)
         self.create_field("Address", 3)
+        self.create_field("Adhaar Card", 4)
+        self.create_field("Withdraw Amount", 5)
+
         
         # Submit button
         submit_button = tk.Button(root, text="Submit", command=self.submit_form)
-        submit_button.grid(row=5, column=1, pady=10)
+        submit_button.grid(row=7, column=1, pady=10)
         
     def create_field(self, label_text, row):
         label = tk.Label(self.root, text=label_text)

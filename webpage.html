@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Sector Form</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Group */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            font-weight: bold;
+            color: #34495e;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: calc(100% - 40px);
+            padding: 12px;
+            border: 1px solid #ccd1d9;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #3498db;
+        }
+
+        /* Microphone Button */
+        .mic-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #3498db;
+            position: absolute;
+            right: 10px;
+            top: 35px;
+            cursor: pointer;
+        }
+
+        .mic-button:hover {
+            color: #2c3e50;
+        }
+
+        /* Submit Button */
+        .submit-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Banking Sector Form</h2>
+        <form id="bankingForm">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName">
+                <button type="button" class="mic-button" onclick="startVoiceInput('fullName')">🎙️</button>
+            </div>
+            <div class="form-group">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber">
+                <button type="button" class="mic-button" onclick="startVoiceInput('accountNumber')">🎙️</button>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber">
+                <button type="button" class="mic-button" onclick="startVoiceInput('phoneNumber')">🎙️</button>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address">
+                <button type="button" class="mic-button" onclick="startVoiceInput('address')">🎙️</button>
+            </div>
+            <div class="form-group">
+                <label for="aadhaar">Aadhaar Card:</label>
+                <input type="text" id="aadhaar">
+                <button type="button" class="mic-button" onclick="startVoiceInput('aadhaar')">🎙️</button>
+            </div>
+            <div class="form-group">
+                <label for="withdrawAmount">Withdraw Amount:</label>
+                <input type="text" id="withdrawAmount">
+                <button type="button" class="mic-button" onclick="startVoiceInput('withdrawAmount')">🎙️</button>
+            </div>
+            <button type="button" class="submit-button" onclick="submitForm()">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        function startVoiceInput(fieldId) {
+            if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+                alert("Your browser does not support speech recognition.");
+                return;
+            }
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-IN'; // Set language to English
+
+            recognition.start();
+            recognition.onresult = (event) => {
+                document.getElementById(fieldId).value = event.results[0][0].transcript;
+            };
+
+            recognition.onerror = (event) => {
+                alert("Speech recognition error: " + event.error);
+            };
+        }
+
+        function submitForm() {
+            const formElements = document.getElementById("bankingForm").elements;
+            let formData = "";
+            for (let i = 0; i < formElements.length; i++) {
+                if (formElements[i].type === "text") {
+                    formData += `${formElements[i].previousElementSibling.textContent} ${formElements[i].value}\n`;
+                }
+            }
+            alert("Form Submitted:\n" + formData);
+        }
+    </script>
+
+</body>
+</html>
