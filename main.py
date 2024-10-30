@@ -42,7 +42,8 @@ class BankingFormApp:
         )''')
         self.conn.commit()
         
-        # Creating form labels and fields
+        # Create form labels, fields, and store entry widgets in a list
+        self.entries = []
         self.create_field("Full Name", 0)
         self.create_field("Account Number", 1)
         self.create_field("Phone Number", 2)
@@ -59,6 +60,7 @@ class BankingFormApp:
         label.grid(row=row, column=0, padx=10, pady=5, sticky="w")
         entry = tk.Entry(self.root, width=40)
         entry.grid(row=row, column=1, padx=10, pady=5)
+        self.entries.append(entry)  # Store entry widget reference
         
         # Voice Input button
         voice_button = tk.Button(self.root, text="🎙️", command=lambda e=entry: self.fill_with_voice(e))
@@ -71,12 +73,16 @@ class BankingFormApp:
             entry.insert(0, text)
 
     def submit_form(self):
-        # Retrieve data from all fields
-        fields = [
-            self.root.grid_slaves(row=i, column=1)[0].get()
-            for i in range(6)  # Updated to include all fields
-        ]
+        # Retrieve data directly from each entry widget in self.entries
+        fields = [entry.get() for entry in self.entries]
         
+        # Validate withdraw amount as a numeric value
+        try:
+            fields[5] = float(fields[5])  # Convert withdraw amount to float
+        except ValueError:
+            messagebox.showerror("Invalid Input", "Please enter a valid numeric value for Withdraw Amount.")
+            return
+
         # Display form data
         info = "\n".join(f"{self.root.grid_slaves(row=i, column=0)[0]['text']}: {fields[i]}" for i in range(6))
         messagebox.showinfo("Form Submitted", f"Details:\n{info}")
@@ -88,8 +94,6 @@ class BankingFormApp:
         )
         self.conn.commit()
 
-    def __del__(self):
-        self.conn.close()
 
 # Run the application
 if __name__ == "__main__":

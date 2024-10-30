@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
+            background-color: #4b0404;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -157,17 +157,43 @@
             };
         }
 
-        function submitForm() {
+        async function submitForm() {
             const formElements = document.getElementById("bankingForm").elements;
-            let formData = "";
-            for (let i = 0; i < formElements.length; i++) {
-                if (formElements[i].type === "text") {
-                    formData += `${formElements[i].previousElementSibling.textContent} ${formElements[i].value}\n`;
+            
+            // Collect form data
+            const formData = {
+                full_name: document.getElementById("fullName").value,
+                account_number: document.getElementById("accountNumber").value,
+                phone_number: document.getElementById("phoneNumber").value,
+                address: document.getElementById("address").value,
+                aadhaar_card: document.getElementById("aadhaar").value,
+                withdraw_amount: parseFloat(document.getElementById("withdrawAmount").value)
+            };
+    
+            try {
+                // Send data to backend
+                const response = await fetch("http://127.0.0.1:5000/submit_form", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('response:',response)
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+                } else {
+                    alert("Failed to submit form. Please try again.");
                 }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again later.");
             }
-            alert("Form Submitted:\n" + formData);
         }
     </script>
+    
 
 </body>
 </html>
